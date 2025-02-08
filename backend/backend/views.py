@@ -57,9 +57,34 @@ def get_weather(request):
     url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FChicago"
 
 
-    response = requests.get(url)  
-    data = response.json()
-    return JsonResponse(data)
+    response = requests.get(url)
+    weather_data = response.json()
+
+    temperature = weather_data["current"]["temperature_2m"]
+    humidity = weather_data["current"]["relative_humidity_2m"]
+    precipitation = weather_data["current"]["precipitation"]
+    cloud_cover = weather_data["current"]["cloud_cover"]
+    wind_speed = weather_data["current"]["wind_speed_10m"]
+
+    ai_prompt = (
+            f"Current Weather Conditions:\n"
+            f"- Location: {latitude}, {longitude}\n"
+            f"- Temperature: {temperature}°F\n"
+            f"- Humidity: {humidity}%\n"
+            f"- Precipitation: {precipitation} mm\n"
+            f"- Cloud Cover: {cloud_cover}%\n"
+            f"- Wind Speed: {wind_speed} mph\n\n"
+            f"Based on these conditions, provide a short and practical farming tip."
+    )
+
+    ai_advice = get_response(ai_prompt, "anonymous")
+
+    return JsonResponse({
+            "weather": weather_data,
+            "ai_advice": ai_advice
+    })
+
+
 
 
 @csrf_exempt
