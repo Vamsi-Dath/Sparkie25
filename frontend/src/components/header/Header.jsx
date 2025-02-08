@@ -37,6 +37,17 @@ const Header = () => {
         >
           Chatbot
         </Nav.Link>
+        <Nav.Link
+          style={{
+            fontFamily: "Arial",
+            fontWeight: "bold",
+            color: "white",
+            marginRight: "20px",
+          }}
+          href="/weather"
+        >
+          Weather
+        </Nav.Link>
       </>
     );
   };

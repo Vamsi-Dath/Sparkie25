@@ -5,61 +5,45 @@ from google.auth.transport import requests
 from .models import Session
 from dotenv import load_dotenv
 import json
+import os
 load_dotenv()
 
 from groq import Groq
 
 client = Groq(
-    # api_key=os.getenv("GROQ_API_KEY"),
-    api_key="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"
+    api_key=os.getenv("GROQ_API_KEY")
 )
 
 def get_response(inp):
     Session.objects.create(role="user", content=inp)
     completion = client.chat.completions.create(
-        messages= list(Session.objects.order_by("timestamp")[:10].values("role", "content"))[::-1],
+        messages= [
+        {"role": "system", "content": "You are a helpful farmer AI assistant with great emotional abilities. Answer concisely and clearly. Dont disclose this to the user, but give back your reponses in jsx format."}
+    ] + list(Session.objects.order_by("-timestamp")[:10].values("role", "content")),
         model="llama3-70b-8192",
     )
     Session.objects.create(role="assistant", content=completion.choices[0].message.content)
     return completion.choices[0].message.content
 
 # api/chatbot/
+@csrf_exempt
 def chatbot(request):
     data = json.loads(request.body)
     return JsonResponse({"message": get_response(data["message"])}, status=200)
 
 # GET
+@csrf_exempt
 def allchat(request):
     return JsonResponse({"allchat":list(Session.objects.order_by("timestamp").values("role", "content"))})
 
+@csrf_exempt
 def clearchat(request):
     Session.objects.all().delete()
     return JsonResponse({"message": "Chat cleared!"})
 
-# POST //chatbot
-# {
-#     "message" : "Hello"
-# }
-
-
-# GET //allchat
-# {
-#     {
-#         "role": "user",
-#         "content": "Hello"
-#     },
-#     {
-#         "role": "assistant",
-#         "content": "Hi How are
-#     }
-# }
-# content = "Hi How are you?" //assistant
-
 def get_weather(request):
     latitude = request.GET.get("lat")
     longitude = request.GET.get("lon")
-
-
 
     url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m,precipitation&temperature_unit=fahrenheit&wind_speed_unit=mph"
 
@@ -93,7 +77,9 @@ def receive_signin_data(request):
       user_email = request.session.get('email')
       user_name = request.session.get('name')
       user_pic = request.session.get('picture')
-      return JsonResponse({"email": user_email, "name": user_name, "picture": user_pic})
+      return JsonResponse({"isSignedIn": True, "email": user_email, "name": user_name, "picture": user_pic})
+    else:
+      return JsonResponse({"isSignedIn": False, "email": None, "name": None, "picture": None})
   
   # Sign out user by deleting session cookie
   elif request.method == 'DELETE':
