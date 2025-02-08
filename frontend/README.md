@@ -3,7 +3,7 @@
 This project consists of a frontend and a backend. The backend Please follow the steps below to get both parts up and running.
 
 ## Structure
-
+```
 project-root/
 │── backend/ # Django Backend
 │ ├── backend/ # Django Core App
@@ -25,7 +25,7 @@ project-root/
 │
 │── .gitignore # Ignored Files
 │── README.md # Project Documentation
-
+```
 ## Requirements
 
 Before you begin, ensure you have the following installed:

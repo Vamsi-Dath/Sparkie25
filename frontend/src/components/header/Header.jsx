@@ -66,15 +66,16 @@ const Header = () => {
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   return (
     <>
-      <Navbar bg="primary" variant="dark" expand="lg" className="px-3">
+      <Navbar bg="primary" variant="dark" expand="lg" className="px-3 Navbarclass">
         <Container fluid>
           <Navbar.Brand href="/">
             <img
-              src="/favicon.ico"
+              src="/static/logo_by_MetaAI.jpg"
               width="50"
               height="50"
+              
               className="d-inline-block align-top"
-              alt="Logo"
+              alt="AgriCulture logo"
             />
           </Navbar.Brand>
           <Navbar.Toggle
@@ -108,6 +109,15 @@ const Header = () => {
           </Nav>
         </Offcanvas.Body>
       </Offcanvas>
+      <style>
+        {`
+        .Navbarclass {
+          position: fixed;
+          width: 100%;
+          z-index: 1000;
+        }
+      `}
+      </style>
     </>
   );
 };
