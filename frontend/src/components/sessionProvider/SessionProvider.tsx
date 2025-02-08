@@ -19,16 +19,17 @@ export const useSession = () => {
   return context;
 };
 
-// Provider component that wraps your app and provides session data
+// Provider component to wrap app with session
 export const SessionProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [session, setSession] = useState<SessionData | null>(null);
-  const [refreshSession, setRefreshSession] = useState(false); // Trigger session refresh
+  const [refreshSession, setRefreshSession] = useState(false);
 
   // Function to trigger a session update
   const updateSession = () => setRefreshSession((prev) => !prev);
 
+  // Runs upon updates
   useEffect(() => {
     const CheckAuth = async () => {
       try {

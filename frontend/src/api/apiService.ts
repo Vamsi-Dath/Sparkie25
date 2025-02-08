@@ -19,6 +19,7 @@ export const sendSigninData = async (payload: SigninData) => {
   }
 };
 
+// Check if user is signed in by sending cookie
 export const authSession = async () => {
   try {
     const response = await api.get("signin", {
@@ -32,6 +33,7 @@ export const authSession = async () => {
   }
 };
 
+// Signs out user
 export const signout = async () => {
   try {
     const response = await api.delete("signin", {
