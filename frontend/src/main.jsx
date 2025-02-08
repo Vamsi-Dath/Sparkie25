@@ -17,7 +17,7 @@ import { Container } from "react-bootstrap";
 
 const PageLayout = () => (
   <>
-    <div className="d-flex flex-column vw-100 vh-100 text-white">
+    <div className="d-flex flex-column vw-100 vh-100 text-dark">
       <Header />
       <Container fluid className="d-flex bg-light flex-column flex-grow-1">
         <Outlet />
