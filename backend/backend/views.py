@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from .models import Session
 from dotenv import load_dotenv
 import os
@@ -52,3 +54,14 @@ def clearchat(request):
 #     }
 # }
 # content = "Hi How are you?" //assistant
+
+@csrf_exempt
+def receive_signin_data(request):
+  if request.method == 'POST':
+    try:
+      data = json.loads(request.body)
+      credential = data.get('credential')
+      return JsonResponse({'message': f'Received credential: {credential}'})
+    except:
+      return JsonResponse({'error': 'Invalid JSON'})
+  return JsonResponse({'error': 'Signin error'})
