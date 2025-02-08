@@ -3,14 +3,18 @@ import { GoogleLogin } from "@react-oauth/google";
 import { sendSigninData, signout } from "../../api/apiService";
 import { Button, Card, Container, Row } from "react-bootstrap";
 import { useSession } from "../../components/sessionProvider/SessionProvider";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
   const { session, updateSession } = useSession();
+
+  const navigate = useNavigate();
 
   const responseMessage = async (response) => {
     console.log("SUCCESS!", response);
     await sendSigninData(response);
     updateSession();
+    navigate("/");
   };
 
   const signoutUser = async () => {
@@ -42,9 +46,7 @@ function Signin() {
             </>
           ) : (
             <>
-              <Card.Text className="mb-4">
-                You are successfully signed in!
-              </Card.Text>
+              <Card.Text className="mb-4">Do you want to signout?</Card.Text>
               <Button
                 style={{ backgroundColor: "orangered" }}
                 onClick={signoutUser}
