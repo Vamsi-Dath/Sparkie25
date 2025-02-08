@@ -48,6 +48,17 @@ const Header = () => {
         >
           Weather
         </Nav.Link>
+        <Nav.Link
+          style={{
+            fontFamily: "Arial",
+            fontWeight: "bold",
+            color: "white",
+            marginRight: "20px",
+          }}
+          href="/webrtc"
+        >
+          WebRTC
+        </Nav.Link>
       </>
     );
   };

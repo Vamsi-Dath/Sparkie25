@@ -4,6 +4,7 @@ import Home from "./pages/home/Home";
 import Test from "./pages/test/Test";
 import Signin from "./pages/signin/Signin";
 import ChatWindow from "./pages/home/Home";
+import WebRTC from "./pages/webrtc/WebRTC";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/chatbot" element={<ChatWindow />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/weather" element={<Test />} />
+            <Route path="/webrtc" element={<WebRTC />} />
           </Route>
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
