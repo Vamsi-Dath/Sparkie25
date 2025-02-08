@@ -4,13 +4,24 @@ import reactLogo from "./assets/react.svg";
 import Scrollbar from "react-scrollbars-custom";
 import viteLogo from "/vite.svg";
 import { FiSend } from "react-icons/fi";
+import { TbX, TbXboxX } from "react-icons/tb";
 import "./App.css";
 
 const Header = () => {};
 
+const ClearChat = () => {
+  return (
+    <div className="tooltip-container">
+      <TbXboxX size={25} style={{ cursor: "pointer" }} />
+      <span className="tooltip">Clear Chat</span>
+    </div>
+  );
+};
+
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const chatBoxRef = useState(null);
+  const [user, setUser] = useState(null);
   const handleSendMessage = async (message) => {
     if (message.trim() === "") return;
 
@@ -38,7 +49,7 @@ const ChatWindow = () => {
 
   const fetchAllChat = async () => {
     try {
-      const response = await fetch("http:/127.0.0.1:8000/api/allchat/");
+      const response = await fetch("http://127.0.0.1:8000/api/allchat/");
       if (response.ok) {
         const data = await response.json();
         setMessages(
