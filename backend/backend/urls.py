@@ -20,6 +20,10 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+
+    path("api/weather/", get_weather, name="get_weather"),  
+    
+
     path('admin/', admin.site.urls),
     re_path(r'^(?!api\/|auth\/).*', TemplateView.as_view(template_name='index.html')),
     path('auth/', include('allauth.urls')),
