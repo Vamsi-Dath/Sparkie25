@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Col, Container, Form } from "react-bootstrap";
 import { getOffers, sendOffer } from "../../api/apiService";
 
 const WebRTC = () => {
@@ -8,9 +8,10 @@ const WebRTC = () => {
   const remoteVideoRef = useRef();
   const peerConnection = useRef();
   const signalServer = useRef();
-  const [roomId, setRoomId] = useState("room");
+  const [roomId, setRoomId] = useState("");
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [inRoom, setInRoom] = useState(false);
 
   const getAllOffers = async () => {
     try {
@@ -115,6 +116,7 @@ const WebRTC = () => {
   // create room to join
   const handleCreateRoom = async () => {
     console.log("Created room", roomId);
+    setInRoom(true);
     signalServer.current = new WebSocket(
       `ws://127.0.0.1:8000/ws/webrtc/${roomId}/`
     );
@@ -141,7 +143,8 @@ const WebRTC = () => {
 
   // join room
   const handleJoinRoom = async (id) => {
-    console.log("joined room", roomId);
+    setRoomId(id);
+    setInRoom(true);
     signalServer.current = new WebSocket(
       `ws://127.0.0.1:8000/ws/webrtc/${id}/`
     );
@@ -177,6 +180,7 @@ const WebRTC = () => {
     );
   };
 
+  // hang up call
   const handleHangUp = () => {
     alert("Call ended.");
     peerConnection.current?.close();
@@ -191,39 +195,81 @@ const WebRTC = () => {
 
   return (
     <>
-      <Button variant="success" onClick={handleCall}>
-        Call
-      </Button>
-      <input
-        className="d-flex align-items-center gap-2"
-        type="text"
-        placeholder="Room ID"
-        value={roomId}
-        onChange={handleInputChange}
-      />
-      <Button variant="success" onClick={handleCreateRoom}>
-        Create Room
-      </Button>
-      <Button variant="danger" onClick={handleHangUp}>
-        Hang Up
-      </Button>
-      {loading ? (
-        <p>Loading offers...</p>
-      ) : (
-        <div>
-          {offers.map((offer) => {
-            return (
-              <Button key={offer} onClick={handleJoinRoom(offer)}>
-                {offer}
+      <Container className="d-flex w-100">
+        <h1>Video Chat</h1>
+      </Container>
+      <Container className="d-flex">
+        <Col
+          className="bg-dark"
+          style={{ height: "100%", marginRight: "50px" }}
+        >
+          <video
+            ref={localVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="h-100 w-100"
+          />
+        </Col>
+        <Col className="bg-dark" style={{ height: "100%", marginLeft: "50px" }}>
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            className="h-100 w-100"
+          />
+        </Col>
+      </Container>
+      <Container className="justify-content-center d-flex w-100">
+        {inRoom ? (
+          <h5>Room: {roomId}</h5>
+        ) : (
+          <div className="align-items-center">
+            <h5>Not currently in a room.</h5>
+            <div>
+              <input
+                className="w-100 d-flex align-items-center gap-2"
+                type="text"
+                placeholder="Room Name"
+                value={roomId}
+                onChange={handleInputChange}
+              />
+              <Button
+                className="w-100"
+                variant="success"
+                onClick={handleCreateRoom}
+              >
+                Create Room
               </Button>
-            );
-          })}
-          {offers.length}
-        </div>
+            </div>
+            {loading ? (
+              <p>Loading offers...</p>
+            ) : (
+              <div>
+                Available Rooms:
+                {offers.map((offer) => {
+                  return (
+                    <Button key={offer} onClick={() => handleJoinRoom(offer)}>
+                      {offer}
+                    </Button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </Container>
+
+      {inRoom && (
+        <Container className="mt-5 w-100 d-flex flex-column justify-content-center">
+          <Button className="w-100" variant="success" onClick={handleCall}>
+            Call
+          </Button>
+          <Button className="w-100" variant="danger" onClick={handleHangUp}>
+            Hang Up
+          </Button>
+        </Container>
       )}
-      <h1>WebRTC</h1>
-      <video ref={localVideoRef} autoPlay playsInline muted width="300" />
-      <video ref={remoteVideoRef} autoPlay playsInline width="300" />
     </>
   );
 };

@@ -66,7 +66,12 @@ const Header = () => {
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   return (
     <>
-      <Navbar bg="primary" variant="dark" expand="lg" className="px-3">
+      <Navbar
+        style={{ backgroundColor: "green" }}
+        variant="dark"
+        expand="lg"
+        className="px-3"
+      >
         <Container fluid>
           <Navbar.Brand href="/">
             <img
@@ -105,6 +110,17 @@ const Header = () => {
         <Offcanvas.Body>
           <Nav className="flex-column">
             <NavLinks />
+            <Nav.Link
+              style={{
+                fontFamily: "Arial",
+                fontWeight: "bold",
+                color: "white",
+                marginRight: "20px",
+              }}
+              href="/signin"
+            >
+              Signin
+            </Nav.Link>
           </Nav>
         </Offcanvas.Body>
       </Offcanvas>

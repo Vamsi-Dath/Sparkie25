@@ -20,7 +20,11 @@ const PageLayout = () => (
   <>
     <div className="d-flex flex-column vw-100 vh-100 text-dark">
       <Header />
-      <Container fluid className="d-flex bg-light flex-column flex-grow-1">
+      <Container
+        fluid
+        style={{ backgroundColor: "lightgray" }}
+        className="d-flex flex-column flex-grow-1"
+      >
         <Outlet />
       </Container>
     </div>
