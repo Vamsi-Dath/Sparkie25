@@ -27,6 +27,7 @@ function App() {
         fetchWeather(userLat, userLon); 
       },
       () => {
+        
         setError("Location access denied. Please enable location services.");
       }
     );
@@ -79,7 +80,7 @@ function App() {
       {weather && weather.current && (
         <div>
           <h2>📍Location: {lat}, {lon}</h2>
-
+          
           <h3>🌡️ Temperature: {weather.current.temperature_2m}°F</h3>
           <h3>💧 Humidity: {weather.current.relative_humidity_2m}%</h3>
           <h3>🌧️ Precipitation: {weather.current.precipitation} mm</h3>
