@@ -1,0 +1,98 @@
+#root {
+  height: 100vh;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #0066b2;
+}
+
+.login-container {
+  background-color: #7cb9e8;
+  padding: 40px;
+
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 250px;
+  height: 240px;
+}
+
+.chat-window {
+  position: fixed;
+  margin-left: 20%;
+  margin-top: -1%;
+  width: 80%;
+  height: 100%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbox {
+  flex-grow: 1;
+  border-top: 1px solid #ccc;
+  margin-top: 60px;
+  margin-bottom: 20px;
+  background-color: #add8e6;
+  gap: 10px;
+  overflow-y: scroll;
+}
+
+.user {
+  background-color: #7cb9e8;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 250px;
+  height: 240px;
+  word-wrap: break-word;
+}
+
+.assistant {
+  background-color: #f1f1f1;
+  color: #333;
+  align-self: flex-end;
+  border-radius: 20px 20px 20px 0;
+  max-width: 80%;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-container .tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: white;
+  color: black; /* Tooltip text color */
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 122%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+}
+
+.tooltip-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
