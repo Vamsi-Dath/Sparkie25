@@ -1,22 +1,45 @@
 import { useState, useEffect } from "react";
 
-
 function App() {
 
-  //default location set to ARC starbucks
-  const [lat, setLat] = useState(41.87458510527232); 
-  const [lon, setLon] = useState(-87.65070210831874); 
-  
+  const [lat, setLat] = useState("");
+  const [lon, setLon] = useState("");
+
+
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
 
-  const fetchWeather = async () => {
+  useEffect(() => {
+
+    navigator.geolocation
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+
+        setLat(userLat);
+        setLon(userLon);
+
+        fetchWeather(userLat, userLon); 
+      },
+      () => {
+        setError("Location access denied. Please enable location services.");
+      }
+    );
+     
+  }, []);
+
+
+
+  const fetchWeather = async (latitude, longitude) => {
 
     setLoading(true);
+  
+    const response = await fetch(`http://127.0.0.1:8000/api/weather/?lat=${latitude}&lon=${longitude}`);
 
-    const response = await fetch(`http://127.0.0.1:8000/api/weather/?lat=${lat}&lon=${lon}`);
     const data = await response.json();
 
     setWeather(data);
@@ -24,9 +47,7 @@ function App() {
     setLoading(false);
   };
 
-
   return (
-
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h1>Weather Forecast</h1>
 
@@ -39,7 +60,6 @@ function App() {
           onChange={(e) => setLat(e.target.value)}
           step="0.01"
         />
-
         <label> Longitude: </label>
         <input
           type="number"
@@ -47,20 +67,22 @@ function App() {
           onChange={(e) => setLon(e.target.value)}
           step="0.01"
         />
-
-        <button onClick={fetchWeather}>Check Weather</button>
+        <button onClick={() => fetchWeather(lat, lon)}>Check Weather</button>
       </div>
 
 
       {loading && <p>Loading weather data...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      
-      {weather && weather.hourly && (
-        
+
+
+      {weather && weather.current && (
         <div>
-          <h2>Location: {weather.latitude}, {weather.longitude}</h2>
-          <h3>Temperature: {weather.hourly.temperature_2m[0]}°F</h3>
-          <h3>Precipitation: {weather.hourly.precipitation[0]} mm</h3>
+          <h2>Location: {lat}, {lon}</h2>
+          <h3>Temperature: {weather.current.temperature_2m}°F</h3>
+          <h3>Humidity: {weather.current.relative_humidity_2m}%</h3>
+          <h3>Precipitation: {weather.current.precipitation} mm</h3>
+          <h3>Cloud Cover: {weather.current.cloud_cover}%</h3>
+          <h3>Wind Speed: {weather.current.wind_speed_10m} mph</h3>
         </div>
       )}
     </div>
