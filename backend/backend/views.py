@@ -5,13 +5,13 @@ from google.auth.transport import requests
 from .models import Session
 from dotenv import load_dotenv
 import json
+import os
 load_dotenv()
 
 from groq import Groq
 
 client = Groq(
-    # api_key=os.getenv("GROQ_API_KEY"),
-    api_key="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"
+    api_key=os.getenv("GROQ_API_KEY")
 )
 
 def get_response(inp):
@@ -77,7 +77,9 @@ def receive_signin_data(request):
       user_email = request.session.get('email')
       user_name = request.session.get('name')
       user_pic = request.session.get('picture')
-      return JsonResponse({"email": user_email, "name": user_name, "picture": user_pic})
+      return JsonResponse({"isSignedIn": True, "email": user_email, "name": user_name, "picture": user_pic})
+    else:
+      return JsonResponse({"isSignedIn": False, "email": None, "name": None, "picture": None})
   
   # Sign out user by deleting session cookie
   elif request.method == 'DELETE':

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SigninData } from "./apiTypes";
+import { SessionData } from "./apiTypes";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -18,6 +19,7 @@ export const sendSigninData = async (payload: SigninData) => {
   }
 };
 
+// Check if user is signed in by sending cookie
 export const authSession = async () => {
   try {
     const response = await api.get("signin", {
@@ -31,6 +33,7 @@ export const authSession = async () => {
   }
 };
 
+// Signs out user
 export const signout = async () => {
   try {
     const response = await api.delete("signin", {
