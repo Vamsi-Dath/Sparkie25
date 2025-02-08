@@ -1,12 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import reactLogo from "./assets/react.svg";
-import Scrollbar from "react-scrollbars-custom";
-import viteLogo from "/vite.svg";
 import { FiSend } from "react-icons/fi";
 import "./App.css";
-
-const Header = () => {};
 
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
