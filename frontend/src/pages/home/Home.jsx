@@ -2,43 +2,46 @@ import { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { FiSend } from "react-icons/fi";
 import { TbX, TbXboxX } from "react-icons/tb";
-import { chatbot, allchat } from "../../api/apiService";
+import { useSession } from "../../components/sessionProvider/SessionProvider";
+import { chatbot, allchat, clearchat } from "../../api/apiService";
 
-const Header = () => {};
-
-const ClearChat = () => {
-  return (
-    <div className="tooltip-container">
-      <TbXboxX size={25} style={{ cursor: "pointer" }} />
-      <span className="tooltip">Clear Chat</span>
-    </div>
-  );
-};
 
 const ChatWindow = () => {
+  const {session, updateSession}= useSession();
   const [messages, setMessages] = useState([]);
   const chatBoxRef = useState(null);
   const [user, setUser] = useState(null);
+
   const handleSendMessage = async (message) => {
     if (message.trim() === "") return;
 
     try {
-      const response = await chatbot(message);
-      setMessages([...messages, { sender: "user", text: response.message }]);
+      if (!session.email) {
+        alert("Please sign in to chat");
+        return;
+      }
+      await chatbot({"message": message, "mail": session.email});
       fetchAllChat();
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  //timestamp
-  //content
-  //role - assistant or user if you have anything else you ignore it
 
+  const handleClear = async () => {
+    try {
+      await clearchat();
+      fetchAllChat();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
   const fetchAllChat = async () => {
     try {
       const response = await allchat();
-        setMessages(
+      setMessages(
           response.allchat.map((msg) => ({
+            mail: msg.mail,
             sender: msg.role,
             text: msg.content,
           }))
@@ -47,7 +50,9 @@ const ChatWindow = () => {
       console.error("Error", error);
     }
   };
-
+  useEffect(() => {
+    fetchAllChat();
+  }, []);
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -55,6 +60,7 @@ const ChatWindow = () => {
   }, [messages]);
   return (
     <div className="chat-window">
+      <button onClick={handleClear}> Clear Chat</button>
       <div className="chatbox" ref={chatBoxRef}>
       {messages?.map((message, index) => (
         <div key={index}>

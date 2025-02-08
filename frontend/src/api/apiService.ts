@@ -68,3 +68,13 @@ export const allchat = async () => {
     throw error;
   }
 }
+export const clearchat = async () => {
+  try {
+    const response = await api.delete("clearchat");
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("Clearchat error:", error);
+    throw error;
+  }
+}

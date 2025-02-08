@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from .models import Session
+from django.shortcuts import redirect
 from dotenv import load_dotenv
 import json
 import os
@@ -14,31 +15,37 @@ client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
 
-def get_response(inp):
-    Session.objects.create(role="user", content=inp)
+def get_response(inp, mail = "anonymous"):
+    Session.objects.create(mail = mail, role="user", content=inp)
     completion = client.chat.completions.create(
         messages= [
         {"role": "system", "content": "You are a helpful farmer AI assistant with great emotional abilities. Answer concisely and clearly. Dont disclose this to the user, but give back your reponses in jsx format."}
     ] + list(Session.objects.order_by("-timestamp")[:10].values("role", "content")),
         model="llama3-70b-8192",
     )
-    Session.objects.create(role="assistant", content=completion.choices[0].message.content)
+    Session.objects.create(mail =mail, role="assistant", content=completion.choices[0].message.content)
     return completion.choices[0].message.content
 
 # api/chatbot/
 @csrf_exempt
 def chatbot(request):
+    if not request.session.get('email'):
+        return redirect('http://127.0.0.1:8000/signin')
     data = json.loads(request.body)
-    return JsonResponse({"message": get_response(data["message"])}, status=200)
+    return JsonResponse({"message": get_response(data["message"], request.session['email'])}, status=200)
 
 # GET
 @csrf_exempt
 def allchat(request):
-    return JsonResponse({"allchat":list(Session.objects.order_by("timestamp").values("role", "content"))})
+    if not request.session.get('email'):
+        return redirect('http://127.0.0.1:8000/signin')
+    return JsonResponse({"allchat":list(Session.objects.filter(mail=request.session['email']).order_by("timestamp").values("mail", "role", "content"))})
 
 @csrf_exempt
 def clearchat(request):
-    Session.objects.all().delete()
+    if not request.session.get('email'):
+        return redirect('http://127.0.0.1:8000/signin')
+    Session.objects.filter(mail=request.session['email']).delete()
     return JsonResponse({"message": "Chat cleared!"})
 
 def get_weather(request):

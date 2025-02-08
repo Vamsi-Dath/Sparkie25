@@ -29,6 +29,6 @@ urlpatterns = [
     path('auth/', include('allauth.urls')),
     path('api/chatbot', views.chatbot),
     path('api/allchat', views.allchat),
-    path('api/clearchat/', views.clearchat),
+    path('api/clearchat', views.clearchat),
     path('api/signin', views.receive_signin_data)
 ]
