@@ -5,7 +5,7 @@ const Chatbot = () => {
   const API_URL = "http://127.0.0.1:8000/api/chatbot/";
   const [items, setItems] = useState(null);
   useEffect(() => {
-    axios.get(API_URL).then((response) => setItems(response.data.data));
+    axios.get(API_URL).then((response) => setItems(response.data));
   }, []);
 
   useEffect(() => {
@@ -15,7 +15,10 @@ const Chatbot = () => {
   return (
     <>
       <div>
-        <h1>Items List</h1>
+        <h1>Chats</h1>
+      </div>
+      <div>
+        {items}
       </div>
     </>
   );

@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^(?!api\/|auth\/).*', TemplateView.as_view(template_name='index.html')),
     path('auth/', include('allauth.urls')),
-    path('api/chatbot/', views.chatbot_example),
+    path('api/chatbot/', views.chatbot),
+    path('api/allchat/', views.allchat),
+    path('api/clearchat/', views.clearchat),
     path('api/signin', views.receive_signin_data)
 ]
