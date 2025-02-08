@@ -152,20 +152,11 @@ print(STATICFILES_DIRS)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = 1
-
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-          'client_id': '659248833719-4229rh1hlv988v34spdm258q7hgqcejl.apps.googleusercontent.com',
-          'key': ''
-        }
-    }
-}
-
-LOGIN_REDIRECT_URL = "/auth/google/callback"
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

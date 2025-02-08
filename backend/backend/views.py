@@ -1,17 +1,17 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+from google.oauth2 import id_token
+from google.auth.transport import requests
 from .models import Session
 from dotenv import load_dotenv
-import os
 import json
 load_dotenv()
 
 from groq import Groq
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY"),
+    # api_key=os.getenv("GROQ_API_KEY"),
+    api_key="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"
 )
 
 def get_response(inp):
@@ -55,17 +55,6 @@ def clearchat(request):
 # }
 # content = "Hi How are you?" //assistant
 
-@csrf_exempt
-def receive_signin_data(request):
-  if request.method == 'POST':
-    try:
-      data = json.loads(request.body)
-      credential = data.get('credential')
-      return JsonResponse({'message': f'Received credential: {credential}'})
-    except:
-      return JsonResponse({'error': 'Invalid JSON'})
-  return JsonResponse({'error': 'Signin error'})
-
 def get_weather(request):
     latitude = request.GET.get("lat")
     longitude = request.GET.get("lon")
@@ -77,3 +66,37 @@ def get_weather(request):
     response = requests.get(url)
     data = response.json()
     return JsonResponse(data)
+
+@csrf_exempt
+def receive_signin_data(request):
+  # Get user info and add it to session
+  if request.method == 'POST':
+    try:
+      data = json.loads(request.body)
+      credential = data.get('credential')
+
+      idinfo = id_token.verify_oauth2_token(credential, requests.Request())
+      user_email = idinfo['email']
+      user_name = idinfo['name']
+      user_pic = idinfo['picture']
+      request.session['email'] = user_email
+      request.session['name'] = user_name
+      request.session['picture'] = user_pic
+
+      return JsonResponse({"email": user_email, "name": user_name, "picture": user_pic})
+    except:
+      return JsonResponse({'error': 'Data error'})
+
+  # Get user info from session cookie
+  elif request.method == 'GET':
+    if request.session.get('name'):
+      user_email = request.session.get('email')
+      user_name = request.session.get('name')
+      user_pic = request.session.get('picture')
+      return JsonResponse({"email": user_email, "name": user_name, "picture": user_pic})
+  
+  # Sign out user by deleting session cookie
+  elif request.method == 'DELETE':
+    request.session.flush()
+    return JsonResponse({"message": "Session cleared"})
+  return JsonResponse({'error': 'Signin error'})

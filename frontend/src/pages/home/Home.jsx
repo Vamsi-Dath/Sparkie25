@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { FiSend } from "react-icons/fi";
 import { TbX, TbXboxX } from "react-icons/tb";
-import "./App.css";
 
 const Header = () => {};
 
@@ -121,13 +120,13 @@ const ChatWindow = () => {
 function App() {
   return (
     <>
-      <Router>
+      {/* <Router>
         <Routes>
           <Route path="/static/" element={<ChatWindow />} />
         </Routes>
-      </Router>
+      </Router> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
