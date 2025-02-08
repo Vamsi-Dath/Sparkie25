@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { Navbar, Container, Offcanvas, Nav, Dropdown } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Navbar, Container, Offcanvas, Nav } from "react-bootstrap";
 
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const navigate = useNavigate();
-
   const UserOptions = () => {
     return (
-      <Nav.Link className="ms-auto" href="signin">
+      <Nav.Link className="ms-auto" href="/signin">
         Signin
       </Nav.Link>
     );
