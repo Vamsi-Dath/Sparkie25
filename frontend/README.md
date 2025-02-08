@@ -1,6 +1,30 @@
 # Project Setup and Instructions
 
-This project consists of a frontend and a backend. Please follow the steps below to get both parts up and running.
+This project consists of a frontend and a backend. The backend Please follow the steps below to get both parts up and running.
+
+## Structure
+
+project-root/
+│── backend/ # Django Backend
+│ ├── backend/ # Django Core App
+│ ├── migrations/ # Database Migrations
+│ ├── myenv/ # Virtual Environment
+│ ├── db.sqlite3 # Database (Local)
+│ ├── manage.py # Django Management Script
+│ ├── requirements.txt # Backend Dependencies
+│
+│── frontend/ # React Frontend
+│ ├── src/ # Source Files
+│ │ ├── api/ # API Calls
+│ │ ├── components/ # UI Components
+│ │ ├── pages/ # Page Views (Chatbot, Home, Signin, Weather)
+│ ├── public/ # Public Assets
+│ ├── node_modules/ # Node Dependencies
+│ ├── package.json # Frontend Dependencies
+│ ├── vite.config.js # Vite Configuration
+│
+│── .gitignore # Ignored Files
+│── README.md # Project Documentation
 
 ## Requirements
 
