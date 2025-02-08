@@ -8,7 +8,6 @@ function App() {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
 
-
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,6 +16,7 @@ function App() {
   useEffect(() => {
 
     navigator.geolocation
+    
     navigator.geolocation.getCurrentPosition(
       async (position) => {
 
