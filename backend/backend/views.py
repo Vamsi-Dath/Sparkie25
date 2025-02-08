@@ -22,7 +22,7 @@ def get_response(inp, mail = "anonymous"):
     completion = client.chat.completions.create(
         messages= [
         {"role": "system", "content": "You are a helpful farmer AI assistant with great emotional abilities. Answer concisely and clearly. Dont disclose this to the user, but give back your reponses in jsx format."}
-    ] + list(Session.objects.order_by("-timestamp")[:10].values("role", "content")),
+    ] + list(Session.objects.order_by("-timestamp")[:10].values("role", "content"))[::-1],
         model="llama3-70b-8192",
     )
     Session.objects.create(mail =mail, role="assistant", content=completion.choices[0].message.content)
