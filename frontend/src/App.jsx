@@ -14,19 +14,22 @@ function App() {
           const { latitude, longitude } = position.coords;
           fetchWeather(latitude, longitude);
         },
-
+        
+        () => {
+          setError("Location access denied. Please enable location services.");
+        }
       );
 
   }, []);
 
   const fetchWeather = async (lat, lon) => {
-  setLoading(true);
-  const response = await fetch(`http://127.0.0.1:8000/api/weather/?lat=${lat}&lon=${lon}`);
-  const data = await response.json();
-  setWeather(data);
+    setLoading(true);
+    const response = await fetch(`http://127.0.0.1:8000/api/weather/?lat=${lat}&lon=${lon}`);
+    const data = await response.json();
+    setWeather(data);
 
-  setLoading(false);
-
+    setLoading(false);
+  }
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
@@ -42,6 +45,6 @@ function App() {
       )}
     </div>
   );
+      
 }
-
 export default App;
