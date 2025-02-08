@@ -10,7 +10,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import Header from "./components/header/Header";
-import { SessionProvider } from "./components/sessionProvider/SessionProvider";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
@@ -29,18 +28,16 @@ const PageLayout = () => (
 
 createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="659248833719-4229rh1hlv988v34spdm258q7hgqcejl.apps.googleusercontent.com">
-    <SessionProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/chatbot" element={<Chatbot />} />
-            <Route path="/test" element={<Test />} />
-            <Route path="/signin" element={<Signin />} />
-          </Route>
-          {/* <Route path="*" element={<NotFound />} /> */}
-        </Routes>
-      </BrowserRouter>
-    </SessionProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<PageLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/signin" element={<Signin />} />
+        </Route>
+        {/* <Route path="*" element={<NotFound />} /> */}
+      </Routes>
+    </BrowserRouter>
   </GoogleOAuthProvider>
 );

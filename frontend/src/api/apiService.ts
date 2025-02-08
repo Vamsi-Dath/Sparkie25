@@ -10,6 +10,7 @@ const api = axios.create({
 export const sendSigninData = async (payload: SigninData) => {
   try {
     const response = await api.post("signin", payload);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.log("Sign in error:", error);

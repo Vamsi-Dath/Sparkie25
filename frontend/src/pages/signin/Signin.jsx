@@ -5,8 +5,10 @@ import { sendSigninData } from "../../api/apiService";
 function Signin() {
   const responseMessage = async (response) => {
     console.log("SUCCESS!", response);
-    await sendSigninData(response);
-    updateSession();
+    const data = await sendSigninData(response);
+    console.log(data.email);
+    console.log(data.name);
+    console.log(data.picture);
   };
   const errorMessage = (error) => {
     console.log("FAILURE!", error);
