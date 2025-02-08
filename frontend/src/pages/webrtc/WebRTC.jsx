@@ -15,13 +15,11 @@ const WebRTC = () => {
   const getAllOffers = async () => {
     try {
       const response = await getOffers();
-      setOffers(response);
+      setOffers(response.offers);
     } catch (error) {
       console.error("Error fetching offers:", error);
     } finally {
       setLoading(false);
-      console.log("OFFERS");
-      console.log(offers);
     }
   };
 
@@ -115,7 +113,7 @@ const WebRTC = () => {
   };
 
   // create room to join
-  const handleRoom = async () => {
+  const handleCreateRoom = async () => {
     console.log("Created room", roomId);
     signalServer.current = new WebSocket(
       `ws://127.0.0.1:8000/ws/webrtc/${roomId}/`
@@ -137,6 +135,30 @@ const WebRTC = () => {
 
     const offer = await sendOffer({ room_name: roomId });
     console.log(offer);
+
+    setupLocalStream();
+  };
+
+  // join room
+  const handleJoinRoom = async (id) => {
+    console.log("joined room", roomId);
+    signalServer.current = new WebSocket(
+      `ws://127.0.0.1:8000/ws/webrtc/${id}/`
+    );
+
+    // Handle different messages from server
+    signalServer.current.onmessage = async (msg) => {
+      const message = JSON.parse(msg.data);
+      if (message.type === "offer") {
+        await handleRemoteOffer(message.sdp);
+      } else if (message.type === "answer") {
+        await handleRemoteAnswer(message.sdp);
+      } else if (message.type === "candidate") {
+        await handleRemoteCandidate(message.candidate);
+      } else if (message.type === "close") {
+        await handleRemoteClose(message.candidate);
+      }
+    };
 
     setupLocalStream();
   };
@@ -167,15 +189,6 @@ const WebRTC = () => {
     );
   };
 
-  const showOffers = async () => {
-    try {
-      const response = await getOffers();
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <>
       <Button variant="success" onClick={handleCall}>
@@ -188,16 +201,26 @@ const WebRTC = () => {
         value={roomId}
         onChange={handleInputChange}
       />
-      <Button variant="success" onClick={handleRoom}>
+      <Button variant="success" onClick={handleCreateRoom}>
         Create Room
       </Button>
       <Button variant="danger" onClick={handleHangUp}>
         Hang Up
       </Button>
-      <Button variant="danger" onClick={getAllOffers}>
-        OFFERS
-      </Button>
-      {loading ? <p>Loading offers...</p> : <div>{offers}</div>}
+      {loading ? (
+        <p>Loading offers...</p>
+      ) : (
+        <div>
+          {offers.map((offer) => {
+            return (
+              <Button key={offer} onClick={handleJoinRoom(offer)}>
+                {offer}
+              </Button>
+            );
+          })}
+          {offers.length}
+        </div>
+      )}
       <h1>WebRTC</h1>
       <video ref={localVideoRef} autoPlay playsInline muted width="300" />
       <video ref={remoteVideoRef} autoPlay playsInline width="300" />
