@@ -66,11 +66,11 @@ const ChatWindow = () => {
         <div key={index} className={message.sender}>
             {message.sender === "assistant" ? (
               <>
-              <strong>{message.sender}:</strong> <span dangerouslySetInnerHTML={{ __html: message.text }} /> 
-              </>) : (
-              <>
-              <span dangerouslySetInnerHTML={{ __html: message.text +"\n"}} /><strong>:{message.sender}</strong>
-              </>)}
+              <strong>{"Green Pal"}:</strong> <span dangerouslySetInnerHTML={{ __html: message.text }} /> 
+              </>) : ( <>
+                <strong>{message.sender}: </strong><span dangerouslySetInnerHTML={{ __html: message.text}} />
+              </>)
+            }
         </div>
       ))}
       </div>
@@ -100,10 +100,12 @@ const ChatWindow = () => {
       </div>
       <style>{
         `
-        .char-box {
+        .chatbox {
           display: flex;
+          flex-direction: column;
           justify-content: space-between;
           margin: 10px;
+          width: 80%;
           padding-bottom: 20px;
         }
         .chat-window {
@@ -111,14 +113,16 @@ const ChatWindow = () => {
           flex-direction: column;
           justify-content: flex-end;
           align-items: center;
-          height: 100vh;
+          // height: 85vh;
+          bottom:100px;
           width: 100%;
           background: #f2f2f2;
         }
         #inputarea {
-          width: 1000px;
+          width: 90%;
           height: 40px;
           background-color: white;
+          text-align: center;
           color: black;
           border-radius: 10px;
           border: 2px solid black;
@@ -127,6 +131,8 @@ const ChatWindow = () => {
         }
         .send-button{
           cursor: pointer;  
+          align-items: center;
+          margin-left:-50px;
         }
         .message-input {
               display: flex; 
@@ -145,21 +151,19 @@ const ChatWindow = () => {
         }
         .user {
           text-align: right;
-          margin-right: 10px;
           margin-bottom: 10px;
           border-radius: 10px;
           padding: 10px;
           background-color: greylight;
-          max-width: 80%;
+          width: 90%;
         }
         .assistant {
           text-align: left;
-          margin-left: 10px;
           margin-bottom: 10px;
           border-radius: 10px;
           padding: 10px;
           background-color: greylight;
-          max-width: 80%;
+          width: 80%;
         }
         .send-button {
           height: 40px;
