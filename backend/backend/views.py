@@ -1,10 +1,14 @@
+from django.shortcuts import render
 import requests
 from django.http import JsonResponse
 
 def get_weather(request):
+
     latitude = request.GET.get("lat")
     longitude = request.GET.get("lon")
 
+
+    #complete testing if needed
     if not latitude or not longitude:
         return JsonResponse({"error": "Latitude and longitude are required"}, status=400)
 
@@ -15,4 +19,4 @@ def get_weather(request):
         data = response.json()
         return JsonResponse(data)
     except Exception as e:
-        return JsonResponse({"error": "Failed to fetch weather data", "details": str(e)}, status=500)
+        return JsonResponse({"error": "Error fetching weather data", "details": str(e)}, status=500)
