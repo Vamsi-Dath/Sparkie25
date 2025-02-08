@@ -24,7 +24,6 @@ class WebRTCConsumer(AsyncWebsocketConsumer):
   async def receive(self, text_data):
     message = json.loads(text_data)
 
-    # broadcast message to room
     await self.channel_layer.group_send(
       self.room_group_name,
       {

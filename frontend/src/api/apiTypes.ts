@@ -9,3 +9,7 @@ export interface SessionData {
   name: string;
   picture: string;
 }
+
+export interface OfferData {
+  room_name: string;
+}

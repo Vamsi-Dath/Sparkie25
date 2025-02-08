@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
-import { Button } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import { getOffers, sendOffer } from "../../api/apiService";
 
 const WebRTC = () => {
   // set up refs
@@ -7,36 +8,27 @@ const WebRTC = () => {
   const remoteVideoRef = useRef();
   const peerConnection = useRef();
   const signalServer = useRef();
-  const roomId = "room";
+  const [roomId, setRoomId] = useState("room");
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const getAllOffers = async () => {
+    try {
+      const response = await getOffers();
+      setOffers(response);
+    } catch (error) {
+      console.error("Error fetching offers:", error);
+    } finally {
+      setLoading(false);
+      console.log("OFFERS");
+      console.log(offers);
+    }
+  };
+
+  // Call getOffers when the component mounts
   useEffect(() => {
-    signalServer.current = new WebSocket(
-      `ws://127.0.0.1:8000/ws/webrtc/${roomId}/`
-    );
-
-    // Handle different messages from server
-    signalServer.current.onmessage = async (msg) => {
-      const message = JSON.parse(msg.data);
-      if (message.type === "offer") {
-        await handleRemoteOffer(message.sdp);
-      } else if (message.type === "answer") {
-        await handleRemoteAnswer(message.sdp);
-      } else if (message.type === "candidate") {
-        await handleRemoteCandidate(message.candidate);
-      } else if (message.type === "close") {
-        await handleRemoteClose(message.candidate);
-      }
-    };
-
-    // sets up media streams
-    setupLocalStream();
-
-    return () => {
-      if (signalServer.current) {
-        signalServer.current.close();
-      }
-    };
-  }, [roomId]);
+    getAllOffers();
+  }, []);
 
   const setupLocalStream = async () => {
     try {
@@ -118,6 +110,37 @@ const WebRTC = () => {
     peerConnection.current?.close();
   };
 
+  const handleInputChange = (event) => {
+    setRoomId(event.target.value);
+  };
+
+  // create room to join
+  const handleRoom = async () => {
+    console.log("Created room", roomId);
+    signalServer.current = new WebSocket(
+      `ws://127.0.0.1:8000/ws/webrtc/${roomId}/`
+    );
+
+    // Handle different messages from server
+    signalServer.current.onmessage = async (msg) => {
+      const message = JSON.parse(msg.data);
+      if (message.type === "offer") {
+        await handleRemoteOffer(message.sdp);
+      } else if (message.type === "answer") {
+        await handleRemoteAnswer(message.sdp);
+      } else if (message.type === "candidate") {
+        await handleRemoteCandidate(message.candidate);
+      } else if (message.type === "close") {
+        await handleRemoteClose(message.candidate);
+      }
+    };
+
+    const offer = await sendOffer({ room_name: roomId });
+    console.log(offer);
+
+    setupLocalStream();
+  };
+
   // start call by sending offer message
   const handleCall = async () => {
     alert("Call started.");
@@ -144,14 +167,37 @@ const WebRTC = () => {
     );
   };
 
+  const showOffers = async () => {
+    try {
+      const response = await getOffers();
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Button variant="success" onClick={handleCall}>
         Call
       </Button>
+      <input
+        className="d-flex align-items-center gap-2"
+        type="text"
+        placeholder="Room ID"
+        value={roomId}
+        onChange={handleInputChange}
+      />
+      <Button variant="success" onClick={handleRoom}>
+        Create Room
+      </Button>
       <Button variant="danger" onClick={handleHangUp}>
         Hang Up
       </Button>
+      <Button variant="danger" onClick={getAllOffers}>
+        OFFERS
+      </Button>
+      {loading ? <p>Loading offers...</p> : <div>{offers}</div>}
       <h1>WebRTC</h1>
       <video ref={localVideoRef} autoPlay playsInline muted width="300" />
       <video ref={remoteVideoRef} autoPlay playsInline width="300" />
