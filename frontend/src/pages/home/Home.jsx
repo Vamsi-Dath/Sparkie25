@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { FiSend } from "react-icons/fi";
 import { TbX, TbXboxX } from "react-icons/tb";
+import { chatbot, allchat } from "../../api/apiService";
 
 const Header = () => {};
 
@@ -22,19 +23,9 @@ const ChatWindow = () => {
     if (message.trim() === "") return;
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/chatbot/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setMessages([...messages, { sender: "user", text: message }]);
-        fetchAllChat();
-      } else {
-        console.error("Failed to fetch AI response.");
-      }
+      const response = await chatbot(message);
+      setMessages([...messages, { sender: "user", text: response.message }]);
+      fetchAllChat();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -45,16 +36,13 @@ const ChatWindow = () => {
 
   const fetchAllChat = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/allchat/");
-      if (response.ok) {
-        const data = await response.json();
+      const response = await allchat();
         setMessages(
-          data.map((msg) => ({
+          response.allchat.map((msg) => ({
             sender: msg.role,
             text: msg.content,
           }))
         );
-      }
     } catch (error) {
       console.error("Error", error);
     }
@@ -68,11 +56,11 @@ const ChatWindow = () => {
   return (
     <div className="chat-window">
       <div className="chatbox" ref={chatBoxRef}>
-        {messages.map((msg, index) => (
-          <div key={index} className={msg.sender}>
-            <p>{msg.text}</p>
-          </div>
-        ))}
+      {messages?.map((message, index) => (
+        <div key={index}>
+            <strong>{message.sender}:</strong> <span dangerouslySetInnerHTML={{ __html: message.text }} />
+        </div>
+      ))}
       </div>
       <div className="message-input">
         <input
@@ -117,16 +105,4 @@ const ChatWindow = () => {
   );
 };
 
-function App() {
-  return (
-    <>
-      {/* <Router>
-        <Routes>
-          <Route path="/static/" element={<ChatWindow />} />
-        </Routes>
-      </Router> */}
-    </>
-  );
-}
-
-export default App;
+export default ChatWindow;

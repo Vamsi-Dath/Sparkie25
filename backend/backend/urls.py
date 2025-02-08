@@ -21,14 +21,14 @@ from . import views
 
 urlpatterns = [
 
-    path("api/weather/", get_weather, name="get_weather"),  
+    path("api/weather/", views.get_weather, name="get_weather"),  
     
 
     path('admin/', admin.site.urls),
     re_path(r'^(?!api\/|auth\/).*', TemplateView.as_view(template_name='index.html')),
     path('auth/', include('allauth.urls')),
-    path('api/chatbot/', views.chatbot),
-    path('api/allchat/', views.allchat),
+    path('api/chatbot', views.chatbot),
+    path('api/allchat', views.allchat),
     path('api/clearchat/', views.clearchat),
     path('api/signin', views.receive_signin_data)
 ]

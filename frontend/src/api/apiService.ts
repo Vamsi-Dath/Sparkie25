@@ -43,3 +43,25 @@ export const signout = async () => {
     throw error;
   }
 };
+
+export const chatbot = async (message: string) => {
+  try {
+    const response = await api.post("chatbot", { message });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("Chatbot error:", error);
+    throw error;
+  }
+};
+
+export const allchat = async () => {
+  try {
+    const response = await api.get("allchat");
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("Allchat error:", error);
+    throw error;
+  }
+}

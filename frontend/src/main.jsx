@@ -14,6 +14,7 @@ import Header from "./components/header/Header";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import ChatWindow from "./pages/home/Home";
 
 const PageLayout = () => (
   <>
@@ -32,7 +33,7 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route element={<PageLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/chatbot" element={<ChatWindow />} />
           <Route path="/test" element={<Test />} />
           <Route path="/signin" element={<Signin />} />
         </Route>
