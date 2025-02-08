@@ -8,169 +8,14 @@ import "./App.css";
 
 const Header = () => {};
 
-const SignupComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent page reload
-
-    if (!email || !password) {
-      setError("Both fields are required");
-      return;
-    }
-
-    setError(""); // Clear errors if validation passes
-    console.log("Logging in with:", { email, password });
-
-    // Simulate login logic (replace with API call)
-    alert("Login successful!");
-  };
-
-  return (
-    <div className="login-container">
-      <h2 style={{ color: "black" }}>Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            style={{
-              width: "200px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "5px",
-              border: "2px solid transparent",
-              outline: "none",
-            }}
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-        <div>
-          <input
-            style={{
-              width: "200px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "5px",
-              border: "2px solid transparent",
-              outline: "none",
-              marginTop: 10,
-            }}
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" style={{ marginTop: 20, width: "160px" }}>
-          Signup
-        </button>
-      </form>
-    </div>
-  );
-};
-const LoginComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); // Prevent page reload
-
-    if (!email || !password) {
-      setError("Both fields are required");
-      return;
-    }
-
-    setError(""); // Clear errors if validation passes
-    console.log("Logging in with:", { email, password });
-
-    // Simulate login logic (replace with API call)
-    alert("Login successful!");
-  };
-
-  return (
-    <div className="login-container">
-      <h2 style={{ color: "black" }}>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            style={{
-              width: "200px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "5px",
-              border: "2px solid transparent",
-              outline: "none",
-            }}
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your username"
-            required
-          />
-        </div>
-        <div>
-          <input
-            style={{
-              width: "200px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "5px",
-              border: "2px solid transparent",
-              outline: "none",
-              marginTop: 10,
-            }}
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" style={{ marginTop: 20, width: "160px" }}>
-          Login
-        </button>
-      </form>
-
-      <p style={{ marginTop: 15, color: "black" }}>
-        Don't have an account yet?{" "}
-        <a
-          href="/static/register" // Replace with your actual registration page path
-          style={{
-            color: "black",
-            textDecoration: "none",
-            fontWeight: "bold",
-          }}
-        >
-          Register here
-        </a>
-      </p>
-    </div>
-  );
-};
-
 const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
-  const [user, setUser] = useState(null); // Simulate logged-in user
   const chatBoxRef = useState(null);
   const handleSendMessage = async (message) => {
     if (message.trim() === "") return;
 
     try {
-      // Send the message to Django backend
-      const response = await fetch("http://127.0.0.1:8000/chatbot/", {
+      const response = await fetch("http://127.0.0.1:8000/api/chatbot/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
@@ -178,8 +23,8 @@ const ChatWindow = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setMessages([...messages, { sender: "user", text: message }]);
         fetchAllChat();
-        // Add AI's response to chat
       } else {
         console.error("Failed to fetch AI response.");
       }
@@ -193,7 +38,7 @@ const ChatWindow = () => {
 
   const fetchAllChat = async () => {
     try {
-      const response = await fetch("http:/127.0.0.1:8000/allchat/");
+      const response = await fetch("http:/127.0.0.1:8000/api/allchat/");
       if (response.ok) {
         const data = await response.json();
         setMessages(
@@ -222,7 +67,6 @@ const ChatWindow = () => {
           </div>
         ))}
       </div>
-      {/* Message input */}
       <div className="message-input">
         <input
           style={{
@@ -256,8 +100,8 @@ const ChatWindow = () => {
           style={{
             marginBottom: "-7px",
             marginRight: "-2%",
-            cursor: "pointer", // To indicate it can be clicked
-            color: user ? "#4CAF50" : "#ccc", // Green if logged in, grey if not
+            cursor: "pointer",
+            color: user ? "#4CAF50" : "#ccc",
             marginLeft: "10px",
           }}
         />
