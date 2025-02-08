@@ -22,5 +22,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^(?!api/).*$', TemplateView.as_view(template_name='index.html')),
-    path('api/chatbot/', views.chatbot_example),
+    path('api/chatbot/', views.chatbot),
+    path('api/allchat/', views.allchat),
+    path('api/clearchat/', views.clearchat),
 ]
