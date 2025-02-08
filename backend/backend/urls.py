@@ -25,7 +25,7 @@ urlpatterns = [
     
 
     path('admin/', admin.site.urls),
-    re_path(r'^(?!api\/|auth\/).*', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^(?!ws\/|api\/|auth\/).*', TemplateView.as_view(template_name='index.html')),
     path('auth/', include('allauth.urls')),
     path('api/chatbot', views.chatbot),
     path('api/allchat', views.allchat),
