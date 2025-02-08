@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTemperatureHigh, faTint, faCloud, faWind, faCloudRain } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
 
@@ -16,7 +14,7 @@ function App() {
   useEffect(() => {
 
     navigator.geolocation
-    
+
     navigator.geolocation.getCurrentPosition(
       async (position) => {
 
@@ -80,13 +78,13 @@ function App() {
 
       {weather && weather.current && (
         <div>
-          <h2>Location: {lat}, {lon}</h2>
+          <h2>📍Location: {lat}, {lon}</h2>
 
-          <h3><FontAwesomeIcon icon={faTemperatureHigh} /> Temperature: {weather.current.temperature_2m}°F</h3>
-          <h3><FontAwesomeIcon icon={faTint} /> Humidity: {weather.current.relative_humidity_2m}%</h3>
-          <h3><FontAwesomeIcon icon={faCloudRain} /> Precipitation: {weather.current.precipitation} mm</h3>
-          <h3><FontAwesomeIcon icon={faCloud} /> Cloud Cover: {weather.current.cloud_cover}%</h3>
-          <h3><FontAwesomeIcon icon={faWind} /> Wind Speed: {weather.current.wind_speed_10m} mph</h3>
+          <h3>🌡️ Temperature: {weather.current.temperature_2m}°F</h3>
+          <h3>💧 Humidity: {weather.current.relative_humidity_2m}%</h3>
+          <h3>🌧️ Precipitation: {weather.current.precipitation} mm</h3>
+          <h3>☁️ Cloud Cover: {weather.current.cloud_cover}%</h3>
+          <h3>💨 Wind Speed: {weather.current.wind_speed_10m} mph</h3>
         </div>
       )}
     </div>
