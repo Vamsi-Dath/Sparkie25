@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 
 import Home from "./pages/home/Home";
-import Test from "./pages/test/Test";
+import Weather from "./pages/weather/Weather";
 import Signin from "./pages/signin/Signin";
 import ChatWindow from "./pages/home/Home";
 
@@ -35,7 +35,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/" element={<Home />} />
             <Route path="/chatbot" element={<ChatWindow />} />
             <Route path="/signin" element={<Signin />} />
-            <Route path="/weather" element={<Test />} />
+            <Route path="/weather" element={<Weather />} />
           </Route>
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
