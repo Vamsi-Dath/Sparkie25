@@ -11,7 +11,7 @@ const WebRTC = () => {
 
   useEffect(() => {
     signalServer.current = new WebSocket(
-      `ws://localhost:8000/ws/webrtc/${roomId}/`
+      `ws://127.0.0.1:8000/ws/webrtc/${roomId}/`
     );
 
     // Handle different messages from server
@@ -80,6 +80,8 @@ const WebRTC = () => {
 
   // prepares answer if receives offer message from remote
   const handleRemoteOffer = async (sdp) => {
+    if (peerConnection.current?.signalingState !== "stable") return;
+
     // sets remote sdp and type from offer
     await peerConnection.current.setRemoteDescription(
       new RTCSessionDescription({ type: "offer", sdp })
