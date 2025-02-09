@@ -30,5 +30,6 @@ urlpatterns = [
     path('api/chatbot', views.chatbot),
     path('api/allchat', views.allchat),
     path('api/clearchat', views.clearchat),
-    path('api/signin', views.receive_signin_data)
+    path('api/signin', views.receive_signin_data),
+    path('api/offers', views.offers)
 ]

@@ -1,47 +1,64 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import { sendSigninData, authSession, signout } from "../../api/apiService";
-import { Button } from "react-bootstrap";
+import { sendSigninData, signout } from "../../api/apiService";
+import { Button, Card, Container, Row } from "react-bootstrap";
 import { useSession } from "../../components/sessionProvider/SessionProvider";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
   const { session, updateSession } = useSession();
 
+  const navigate = useNavigate();
+
   const responseMessage = async (response) => {
     console.log("SUCCESS!", response);
-    const data = await sendSigninData(response);
+    await sendSigninData(response);
     updateSession();
-    console.log(data.email);
-    console.log(data.name);
-    console.log(data.picture);
+    navigate("/");
   };
 
-  const testSession = async () => {
-    const data = await authSession();
+  const signoutUser = async () => {
+    await signout();
     updateSession();
-    console.log(data);
-    console.log(data.email);
-    console.log(data.name);
-    console.log(data.picture);
-  };
-
-  const testSignout = async () => {
-    const data = await signout();
-    updateSession();
-    console.log(data);
   };
 
   const errorMessage = (error) => {
     console.log("FAILURE!", error);
   };
   return (
-    <div>
-      <h1>Google Login</h1>
-      <h1>BLOP: {session?.isSignedIn ? "LOGGED IN" : "LOGGED OUT"}</h1>
-      <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-      <Button onClick={testSession}>TEST SESSION</Button>
-      <Button onClick={testSignout}>TEST SIGNOUT</Button>
-    </div>
+    <Container className="d-flex justify-content-center align-items-center mt-5">
+      <Row className="w-50 justify-content-center">
+        <Card className="p-4 align-items-center">
+          <Card.Title className="mb-4">AgriCulture Signin</Card.Title>
+
+          {!session?.isSignedIn ? (
+            <>
+              <Card.Text className="mb-4">
+                Please sign in to continue.
+              </Card.Text>
+              <GoogleLogin
+                clientId="your-client-id" // Add your client ID
+                onSuccess={responseMessage}
+                onFailure={errorMessage}
+                buttonText="Sign in with Google"
+                className="btn btn-danger w-100"
+              />
+            </>
+          ) : (
+            <>
+              <Card.Text className="mb-4">Do you want to signout?</Card.Text>
+              <Button
+                style={{ backgroundColor: "orangered" }}
+                onClick={signoutUser}
+                className="w-100"
+              >
+                Sign Out
+              </Button>
+            </>
+          )}
+        </Card>
+      </Row>
+    </Container>
   );
 }
 export default Signin;

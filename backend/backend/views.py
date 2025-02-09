@@ -17,6 +17,8 @@ client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
 
+offer_list = []
+
 def get_response(inp, mail = "anonymous"):
     Session.objects.create(mail = mail, role="user", content=inp)
     completion = client.chat.completions.create(
@@ -122,3 +124,20 @@ def receive_signin_data(request):
         request.session.flush()
         return JsonResponse({"message": "Session cleared"})
     return JsonResponse({'error': 'Signin error'})
+
+@csrf_exempt
+# sends or receives room offers
+def offers(request):
+  if request.method == 'GET':
+    try:
+      return JsonResponse({"offers": offer_list})
+    except:
+      return JsonResponse({"error": "offers error"})
+  elif request.method == 'POST':
+    try:
+      data = json.loads(request.body)
+      room_name = data.get('room_name')
+      offer_list.append(room_name)
+      return JsonResponse({"offers": offer_list})
+    except:
+      return JsonResponse({"error": "offers error"})

@@ -1,6 +1,5 @@
 import axios from "axios";
-import { SigninData } from "./apiTypes";
-import { SessionData } from "./apiTypes";
+import { SigninData, SessionData, OfferData } from "./apiTypes";
 
 const api = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
@@ -67,7 +66,31 @@ export const allchat = async () => {
     console.log("Allchat error:", error);
     throw error;
   }
-}
+};
+
+export const getOffers = async () => {
+  try {
+    const response = await api.get("offers");
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("getOffers error:", error);
+    throw error;
+  }
+};
+
+export const sendOffer = async (payload: OfferData) => {
+  try {
+    console.log(payload);
+    const response = await api.post("offers", payload);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log("getOffers error:", error);
+    throw error;
+  }
+};
+
 export const clearchat = async () => {
   try {
     const response = await api.delete("clearchat");
@@ -77,4 +100,4 @@ export const clearchat = async () => {
     console.log("Clearchat error:", error);
     throw error;
   }
-}
+};
