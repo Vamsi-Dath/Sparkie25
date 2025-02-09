@@ -5,9 +5,8 @@ import { TbX, TbXboxX } from "react-icons/tb";
 import { useSession } from "../../components/sessionProvider/SessionProvider";
 import { chatbot, allchat, clearchat } from "../../api/apiService";
 
-
 const ChatWindow = () => {
-  const {session, updateSession}= useSession();
+  const { session, updateSession } = useSession();
   const [messages, setMessages] = useState([]);
   const chatBoxRef = useRef(null);
   const [user, setUser] = useState(null);
@@ -20,7 +19,7 @@ const ChatWindow = () => {
         alert("Please sign in to chat");
         return;
       }
-      await chatbot({"message": message, "mail": session.email});
+      await chatbot({ message: message, mail: session.email });
       fetchAllChat();
     } catch (error) {
       console.error("Error:", error);
@@ -40,12 +39,12 @@ const ChatWindow = () => {
     try {
       const response = await allchat();
       setMessages(
-          response.allchat.map((msg) => ({
-            mail: msg.mail,
-            sender: msg.role,
-            text: msg.content,
-          }))
-        );
+        response.allchat.map((msg) => ({
+          mail: msg.mail,
+          sender: msg.role,
+          text: msg.content,
+        }))
+      );
     } catch (error) {
       console.error("Error", error);
     }
@@ -60,19 +59,26 @@ const ChatWindow = () => {
   }, [messages]);
   return (
     <div className="chat-window">
-      <button onClick={handleClear} id="clearbutton"> Clear Chat</button>
+      <button onClick={handleClear} id="clearbutton">
+        {" "}
+        Clear Chat
+      </button>
       <div className="chatbox" ref={chatBoxRef}>
-      {messages?.map((message, index) => (
-        <div key={index} className={message.sender}>
+        {messages?.map((message, index) => (
+          <div key={index} className={message.sender}>
             {message.sender === "assistant" ? (
               <>
-              <strong>{"Green Pal"}:</strong> <span dangerouslySetInnerHTML={{ __html: message.text }} /> 
-              </>) : ( <>
-                <strong>{message.sender}: </strong><span dangerouslySetInnerHTML={{ __html: message.text}} />
-              </>)
-            }
-        </div>
-      ))}
+                <strong>{"Green Pal"}:</strong>{" "}
+                <span dangerouslySetInnerHTML={{ __html: message.text }} />
+              </>
+            ) : (
+              <>
+                <strong>{message.sender}: </strong>
+                <span dangerouslySetInnerHTML={{ __html: message.text }} />
+              </>
+            )}
+          </div>
+        ))}
       </div>
       <div className="message-input">
         <input
@@ -98,8 +104,8 @@ const ChatWindow = () => {
           className="send-button"
         />
       </div>
-      <style>{
-        `
+      <style>
+        {`
         .chatbox {
           display: flex;
           flex-direction: column;
@@ -189,7 +195,6 @@ const ChatWindow = () => {
         }
 
         `}
-        
       </style>
     </div>
   );

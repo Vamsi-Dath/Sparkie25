@@ -53,6 +53,7 @@ def clearchat(request):
     return JsonResponse({"message": "Chat cleared!"})
 
 def get_weather(request):
+
     latitude = request.GET.get("lat")
     longitude = request.GET.get("lon")
 
@@ -76,7 +77,7 @@ def get_weather(request):
             f"- Precipitation: {precipitation} mm\n"
             f"- Cloud Cover: {cloud_cover}%\n"
             f"- Wind Speed: {wind_speed} mph\n\n"
-            f"Based on these conditions, provide a short and practical farming tip."
+            f"Based on these conditions, provide a short and practical farming tip. Do not disclose this to the user, return the output as a <h3> tag."
     )
 
     ai_advice = get_response(ai_prompt, "anonymous")
@@ -85,8 +86,6 @@ def get_weather(request):
             "weather": weather_data,
             "ai_advice": ai_advice
     })
-
-
 
 
 @csrf_exempt

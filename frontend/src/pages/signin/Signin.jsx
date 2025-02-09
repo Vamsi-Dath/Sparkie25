@@ -26,7 +26,7 @@ function Signin() {
     console.log("FAILURE!", error);
   };
   return (
-    <Container className="d-flex justify-content-center align-items-center mt-5">
+    <Container className="d-flex h-100 justify-content-center align-items-center mt-5">
       <Row className="w-50 justify-content-center">
         <Card className="p-4 align-items-center">
           <Card.Title className="mb-4">AgriCulture Signin</Card.Title>
