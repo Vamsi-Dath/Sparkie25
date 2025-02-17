@@ -4,6 +4,7 @@ This project consists of a frontend and a backend. Please follow the steps below
 
 ## Structure
 
+```
 project-root/
 │── .venv/                       # Virtual environment (backend dependencies)
 │
@@ -73,6 +74,8 @@ project-root/
 │
 ├── README.md                  # Project documentation
 └── .gitignore                     # Global ignored files
+```
+
 
 
 ## Requirements
